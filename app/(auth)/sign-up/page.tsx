@@ -1,9 +1,9 @@
 import React from 'react';
-import DashboardPage from "@/components/pages/DashboardPage";
+import SignUp from "@/components/auth/SignUp";
 
 const Page = () => {
     return (
-        <DashboardPage />
+        <SignUp />
     );
 };
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import DashboardPage from "@/components/pages/DashboardPage";
+import MangeUserPage from "@/components/pages/MangeUserPage";
 
 const Page = () => {
     return (
-        <DashboardPage />
+       <MangeUserPage />
     );
 };
 

@@ -1,10 +1,12 @@
+import React from "react";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google"
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider"
 import {cn} from "@/lib/utils";
-import React from "react";
-import Header from "@/components/Header";
+import StoreProvider from "@/store/StoreProvider";
+import {SessionProvider} from "next-auth/react";
+import { Toaster } from "@/components/ui/sonner"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -27,17 +29,21 @@ export default function RootLayout({
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
       )}>
-      <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-      >
-          <main className="w-full min-h-screen max-w-[1550px] mx-auto space-y-4">
-              <Header />
-            {children}
-          </main>
-        </ThemeProvider>
+      <SessionProvider>
+      <StoreProvider>
+          <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+          >
+              <main className="w-full min-h-screen max-w-[1550px] mx-auto space-y-4">
+                {children}
+              </main>
+              <Toaster />
+            </ThemeProvider>
+      </StoreProvider>
+      </SessionProvider>
       </body>
     </html>
   );

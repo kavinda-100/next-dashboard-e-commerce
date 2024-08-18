@@ -1,10 +1,9 @@
 import React from 'react';
+import SignIn from "@/components/auth/SignIn";
 
 const Page = () => {
     return (
-        <div>
-            add user
-        </div>
+        <SignIn />
     );
 };
 

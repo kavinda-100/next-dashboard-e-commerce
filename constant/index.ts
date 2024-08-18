@@ -29,8 +29,8 @@ export const navigationBar: navigationBarType[] = [
         path: "/order",
     },
     {
-        label: "User",
-        path: "/add-user",
+        label: "Users",
+        path: "/manage-user",
     },
     {
         label: "Setting",

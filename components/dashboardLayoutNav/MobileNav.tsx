@@ -9,8 +9,9 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import {navigationBar} from "@/constant";
 import {Button} from "@/components/ui/button";
+import { FaAlignJustify } from "react-icons/fa";
+import {navigationBar} from "@/constant";
 import {usePathname} from "next/navigation";
 import Link from "next/link";
 
@@ -19,7 +20,7 @@ const MobileNav = () => {
 
     return (
         <Sheet>
-            <SheetTrigger>open</SheetTrigger>
+            <SheetTrigger><FaAlignJustify className="w-5 h-5"/></SheetTrigger>
             <SheetContent className="mt-3">
                 <div className="flex flex-col space-y-4 p-3 w-full">
                     {
