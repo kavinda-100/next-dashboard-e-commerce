@@ -19,8 +19,17 @@ import {
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import Link from "next/link";
+import {useRouter} from "next/navigation";
+import {useRegisterMutation} from "@/store/api/registerApi";
+import FormSuccess from "@/components/FormSuccess";
+import FormError from "@/components/FormError";
 
 const SignUp = () => {
+    const router = useRouter();
+    const [ register, { isLoading} ] = useRegisterMutation();
+    const [isSuccess, setIsSuccess] = React.useState<string | undefined>("");
+    const [isError, setIsError] = React.useState<string | undefined>("");
+
     const form = useForm<z.infer<typeof ZodSignUpFromSchema>>({
         resolver: zodResolver(ZodSignUpFromSchema),
         defaultValues:{
@@ -32,29 +41,20 @@ const SignUp = () => {
         }
     })
 
-    // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof ZodSignUpFromSchema>) {
-        fetch("/api/sign-up", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(values),
-        })
-            .then(async (res) => {
-                if (res.ok) {
-                    const data = await res.json();
-                    toast.success(data.message || "Account created successfully");
-                    form.reset();
-                } else {
-                    const errorData = await res.json();
-                    toast.error(errorData.message || "An error occurred");
-                }
-            })
-            .catch((error) => {
-                toast.error("An error occurred");
-            });
-    }
+    const onSubmit = async (values: z.infer<typeof ZodSignUpFromSchema>) => {
+        try {
+            const result = await register(values).unwrap(); // Await and unwrap RTK query response
+            toast.success(result.message || "Account created successfully");
+            setIsSuccess(result.message);
+            form.reset();
+            router.push("/store-form")
+        }
+        catch (err: any | Error) {
+            // console.log(err);
+            setIsError( err.data.message || "An error occurred");
+            toast.error(err.data.message  || "An error occurred");
+        }
+    };
 
     return (
         <section className="flex justify-center items-center">
@@ -77,7 +77,9 @@ const SignUp = () => {
                                    <FormItem>
                                        <FormLabel>First Name</FormLabel>
                                        <FormControl>
-                                           <Input placeholder="Jhone" {...field} />
+                                           <Input
+                                               disabled={isLoading}
+                                               placeholder="Jhone" {...field} />
                                        </FormControl>
                                        <FormMessage/>
                                    </FormItem>
@@ -90,7 +92,9 @@ const SignUp = () => {
                                    <FormItem>
                                        <FormLabel>Last Name</FormLabel>
                                        <FormControl>
-                                           <Input placeholder="Doe" {...field} />
+                                           <Input
+                                               disabled={isLoading}
+                                               placeholder="Doe" {...field} />
                                        </FormControl>
                                        <FormMessage/>
                                    </FormItem>
@@ -104,7 +108,9 @@ const SignUp = () => {
                                <FormItem>
                                    <FormLabel>Email</FormLabel>
                                    <FormControl>
-                                       <Input placeholder="JhoneDoe@gmail.com" {...field} />
+                                       <Input
+                                           disabled={isLoading}
+                                           placeholder="JhoneDoe@gmail.com" {...field} />
                                    </FormControl>
                                    <FormMessage/>
                                </FormItem>
@@ -117,7 +123,9 @@ const SignUp = () => {
                                <FormItem>
                                    <FormLabel>Password</FormLabel>
                                    <FormControl>
-                                       <Input placeholder="*******" {...field} />
+                                       <Input
+                                           disabled={isLoading}
+                                           placeholder="*******" {...field} />
                                    </FormControl>
                                    <FormMessage/>
                                </FormItem>
@@ -130,7 +138,9 @@ const SignUp = () => {
                                <FormItem>
                                    <FormLabel>Confirm Password</FormLabel>
                                    <FormControl>
-                                       <Input placeholder="*******" {...field} />
+                                       <Input
+                                           disabled={isLoading}
+                                           placeholder="*******" {...field} />
                                    </FormControl>
                                    <FormMessage/>
                                </FormItem>
@@ -140,7 +150,13 @@ const SignUp = () => {
                            <p className="font-light text-sm">already have an account?</p>
                            <Link href="/sign-in" className="font-light text-sm hover:underline">Sign In</Link>
                        </div>
-                       <Button type="submit" className="w-full">Sign Up</Button>
+                       {
+                            isSuccess && <FormSuccess message={isSuccess}/>
+                       }
+                       {
+                            isError && <FormError message={isError}/>
+                       }
+                       <Button type="submit" className="w-full" disabled={isLoading}>Sign Up</Button>
                    </form>
                </Form>
 
