@@ -18,21 +18,40 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from "next/link";
+import {useRouter} from "next/navigation";
+import {useLoginMutation} from "@/store/api/registerApi";
+import FormSuccess from "@/components/FormSuccess";
+import FormError from "@/components/FormError";
+import {toast} from "sonner";
 
 const SignIn = () => {
+    const router = useRouter()
+    const [login, {isLoading}] = useLoginMutation()
+    const [isSuccess, setIsSuccess] = React.useState<string | undefined>("");
+    const [isError, setIsError] = React.useState<string | undefined>("");
+
     const form = useForm<z.infer<typeof ZodSignInFromSchema>>({
         resolver: zodResolver(ZodSignInFromSchema),
     })
 
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof ZodSignInFromSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof ZodSignInFromSchema>) {
+        try {
+            const result = await login(values).unwrap(); // Await and unwrap RTK query response
+            toast.success(result.message || "SignIn successfully");
+            setIsSuccess(result.message);
+            form.reset();
+            router.push("/dashboard")
+        }
+        catch (err: any | Error) {
+            // console.log(err);
+            setIsError( err.data.message || "An error occurred");
+            toast.error(err.data.message  || "An error occurred");
+        }
     }
 
     return (
-        <section className="flex justify-center items-center">
+        <section className="flex justify-center items-center w-full h-screen">
             <CardWrapper
                 headerLabel="Sign In"
                 subHeaderLabel="Sign in to your account. 🔑"
@@ -51,7 +70,9 @@ const SignIn = () => {
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="JhoneDoe@gmail.com" {...field} />
+                                        <Input
+                                            disabled={isLoading}
+                                            placeholder="JhoneDoe@gmail.com" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -64,7 +85,9 @@ const SignIn = () => {
                                 <FormItem>
                                     <FormLabel>Password</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="*******" {...field} />
+                                        <Input
+                                            disabled={isLoading}
+                                            placeholder="*******" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -74,7 +97,17 @@ const SignIn = () => {
                             <p className="font-light text-sm">do not have an account?</p>
                             <Link href="/sign-up" className="font-light text-sm hover:underline">Sign Up</Link>
                         </div>
-                        <Button type="submit" className="w-full">Sign In</Button>
+                        {
+                            isSuccess && <FormSuccess message={isSuccess}/>
+                        }
+                        {
+                            isError && <FormError message={isError}/>
+                        }
+                        <Button
+                            disabled={isLoading}
+                            type="submit" className="w-full">
+                            {isLoading ? "SignIn..." : "Sign In"}
+                        </Button>
                     </form>
                 </Form>
 

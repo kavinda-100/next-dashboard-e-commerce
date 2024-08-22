@@ -4,7 +4,7 @@ import React from 'react';
 import {
     Sheet,
     SheetContent,
-    SheetDescription,
+    SheetDescription, SheetFooter,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
@@ -14,9 +14,19 @@ import { FaAlignJustify } from "react-icons/fa";
 import {navigationBar} from "@/constant";
 import {usePathname} from "next/navigation";
 import Link from "next/link";
+import {signOut} from "next-auth/react";
+import {useRouter} from "next/navigation";
 
 const MobileNav = () => {
     const pathname = usePathname()
+    const router = useRouter();
+
+    const LogOut = () => {
+        signOut().then(r => {
+            console.log(r)
+            router.push("/sign-in");
+        });
+    }
 
     return (
         <Sheet>
@@ -39,6 +49,17 @@ const MobileNav = () => {
                         })
                     }
                 </div>
+                <SheetFooter>
+                    <Button
+                        size={"lg"}
+                        type={"button"}
+                        variant={"outline"}
+                        className="flex w-full"
+                        onClick={() => LogOut()}
+                    >
+                        Sign Out
+                    </Button>
+                </SheetFooter>
             </SheetContent>
         </Sheet>
     );

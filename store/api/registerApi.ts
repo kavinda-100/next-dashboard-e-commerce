@@ -1,6 +1,6 @@
 import { baseApi } from "./baseApi";
 import {mutationReturnType} from "@/types";
-import {ZodSignUpFormType} from "@/zod/formValidation";
+import {ZodSignUpFormType, ZodSignInFormType} from "@/zod/formValidation";
 
 export const registerApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -11,7 +11,14 @@ export const registerApi = baseApi.injectEndpoints({
                 body,
             }),
         }),
+        login: builder.mutation<mutationReturnType, ZodSignInFormType>({
+           query: (body) => ({
+                url: "/sign-in",
+                method: "POST",
+                body,
+           }),
+        }),
     }),
 });
 
-export const { useRegisterMutation } = registerApi;
+export const { useRegisterMutation, useLoginMutation } = registerApi;

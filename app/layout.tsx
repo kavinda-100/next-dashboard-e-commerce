@@ -31,19 +31,19 @@ export default function RootLayout({
           fontSans.variable
       )}>
       <SessionProvider>
-      <StoreProvider>
-          <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-          >
-              <main className="w-full min-h-screen max-w-[1550px] mx-auto space-y-4">
-                  <EdgeStoreProvider>{children}</EdgeStoreProvider>
-              </main>
-              <Toaster />
-            </ThemeProvider>
-      </StoreProvider>
+          <StoreProvider>
+              <ThemeProvider
+                  attribute="class"
+                  defaultTheme="system"
+                  enableSystem
+                  disableTransitionOnChange
+              >
+                  <main className="w-full min-h-screen max-w-[1550px] mx-auto space-y-4">
+                      <EdgeStoreProvider>{children}</EdgeStoreProvider>
+                  </main>
+                  <Toaster />
+              </ThemeProvider>
+          </StoreProvider>
       </SessionProvider>
       </body>
     </html>

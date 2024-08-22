@@ -1,3 +1,4 @@
+import {Session} from "next-auth";
 
 export type mutationReturnType = {
     message: string;
@@ -7,6 +8,10 @@ export type mutationReturnType = {
 export type FormHeaderLabel = {
     id: number;
     title: string;
+}
+
+export type PagePropsForSession = {
+    session: Session | null
 }
 
 export type StoreFormFieldNames =

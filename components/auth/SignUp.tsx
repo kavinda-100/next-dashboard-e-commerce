@@ -47,7 +47,7 @@ const SignUp = () => {
             toast.success(result.message || "Account created successfully");
             setIsSuccess(result.message);
             form.reset();
-            router.push("/store-form")
+            router.push("/sign-in")
         }
         catch (err: any | Error) {
             // console.log(err);
