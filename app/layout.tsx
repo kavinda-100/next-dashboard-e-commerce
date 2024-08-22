@@ -7,6 +7,7 @@ import {cn} from "@/lib/utils";
 import StoreProvider from "@/store/StoreProvider";
 import {SessionProvider} from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner"
+import { EdgeStoreProvider } from '@/lib/edgestore';
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -38,7 +39,7 @@ export default function RootLayout({
               disableTransitionOnChange
           >
               <main className="w-full min-h-screen max-w-[1550px] mx-auto space-y-4">
-                {children}
+                  <EdgeStoreProvider>{children}</EdgeStoreProvider>
               </main>
               <Toaster />
             </ThemeProvider>

@@ -39,16 +39,7 @@ export const ZodUserShopDetailsFormSchema = z.object({
         .optional(),
 
     openingDate: z
-        .string()
-        .refine(
-            (value) => !isNaN(Date.parse(value)),
-            { message: "Please enter a valid date." }
-        ),
-
-    storeLogo: z
-        .string()
-        .url({ message: "Please provide a valid URL for the store logo." })
-        .optional(),
+        .date(),
 
     businessHours: z
         .string()
@@ -89,13 +80,13 @@ export const ZodUserShopDetailsFormSchema = z.object({
         .min(2, { message: "Country must be at least 2 characters long." }),
 
     latitude: z
-        .number()
-        .refine((val) => val >= -90 && val <= 90, { message: "Latitude must be between -90 and 90." })
+        .string()
+        .refine((val) => Number(val) >= -90 && Number(val) <= 90, { message: "Latitude must be between -90 and 90." })
         .optional(),
 
     longitude: z
-        .number()
-        .refine((val) => val >= -180 && val <= 180, { message: "Longitude must be between -180 and 180." })
+        .string()
+        .refine((val) => Number(val) >= -180 && Number(val) <= 180, { message: "Longitude must be between -180 and 180." })
         .optional(),
 
     storefrontType: z
@@ -111,12 +102,10 @@ export const ZodUserShopDetailsFormSchema = z.object({
         .email({ message: "Please enter a valid email address." }),
 
     phoneNumber: z
-        .string()
-        .regex(/^\+?[1-9]\d{1,14}$/, { message: "Please enter a valid phone number." }),
+        .string(),
 
     alternatePhoneNumber: z
         .string()
-        .regex(/^\+?[1-9]\d{1,14}$/, { message: "Please enter a valid alternate phone number." })
         .optional(),
 
     faxNumber: z
