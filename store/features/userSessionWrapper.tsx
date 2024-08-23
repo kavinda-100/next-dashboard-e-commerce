@@ -19,9 +19,9 @@ const UserSessionWrapper = ({children, session}: UserSessionWrapperType) => {
         dispatch(setUser(null));
     }
     return (
-        <>
+        <React.Fragment>
             {children}
-        </>
+        </React.Fragment>
     );
 };
 

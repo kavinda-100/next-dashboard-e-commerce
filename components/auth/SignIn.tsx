@@ -37,16 +37,20 @@ const SignIn = () => {
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof ZodSignInFromSchema>) {
         try {
-            const result = await login(values).unwrap(); // Await and unwrap RTK query response
+            console.log(values)
+            console.log("sending....")
+            const result = await login(values).unwrap(); // Await and unwrap RTK query response//
             toast.success(result.message || "SignIn successfully");
             setIsSuccess(result.message);
             form.reset();
-            router.push("/dashboard")
-        }
-        catch (err: any | Error) {
-            // console.log(err);
-            setIsError( err.data.message || "An error occurred");
-            toast.error(err.data.message  || "An error occurred");
+            router.push("/dashboard");
+            console.log(result)
+            console.log("done")
+        } catch (err: any | Error) {
+            console.log("error")
+            console.log(err);
+            setIsError(err.data?.message || "An error occurred");
+            toast.error(err.data?.message || "An error occurred");
         }
     }
 
@@ -97,12 +101,8 @@ const SignIn = () => {
                             <p className="font-light text-sm">do not have an account?</p>
                             <Link href="/sign-up" className="font-light text-sm hover:underline">Sign Up</Link>
                         </div>
-                        {
-                            isSuccess && <FormSuccess message={isSuccess}/>
-                        }
-                        {
-                            isError && <FormError message={isError}/>
-                        }
+                        {isSuccess && <FormSuccess message={isSuccess}/>}
+                        {isError && <FormError message={isError}/>}
                         <Button
                             disabled={isLoading}
                             type="submit" className="w-full">
@@ -110,7 +110,6 @@ const SignIn = () => {
                         </Button>
                     </form>
                 </Form>
-
             </CardWrapper>
         </section>
     );
